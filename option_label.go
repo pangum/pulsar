@@ -1,9 +1,12 @@
 package pulsar
 
 var (
+	_ = Label
+	_ = Default
+
 	_ option          = (*optionLabel)(nil)
 	_ subscribeOption = (*optionLabel)(nil)
-	_ publishOption   = (*optionLabel)(nil)
+	_ producerOption  = (*optionLabel)(nil)
 )
 
 type optionLabel struct {
@@ -32,10 +35,6 @@ func (l *optionLabel) applySubscribe(options *subscribeOptions) {
 	options.label = l.label
 }
 
-func (l *optionLabel) applyPublish(options *publishOptions) {
-	options.label = l.label
-}
-
-func (l *optionLabel) applyBrokers(options *brokersOptions) {
+func (l *optionLabel) applyProducer(options *producerOptions) {
 	options.label = l.label
 }
