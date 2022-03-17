@@ -1,3 +1,7 @@
 package pulsar
 
-const defaultLabel = `default`
+const (
+	defaultLabel = `default`
+	defaultKey   = `default`
+	keyFormatter = `%s-%s`
+)

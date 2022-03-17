@@ -6,6 +6,8 @@ type config struct {
 	URL string `yaml:"url" json:"url" xml:"url" toml:"url" validate:"required_without=Brokers,hostname_port"`
 	// 服务器列表
 	Broker []broker `json:"brokers" yaml:"brokers" xml:"brokers" toml:"brokers" validate:"required_without=URL,dive"`
+	// 客户端列表
+	Clients []topicConfig `json:"clients" yaml:"clients" xml:"clients" toml:"clients"`
 	// 选项
 	Options pulsarOptions `json:"options" yaml:"options" xml:"options" toml:"options"`
 }

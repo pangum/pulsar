@@ -8,20 +8,24 @@ import (
 
 // Client 客户端
 type Client struct {
-	clientCache map[string]pulsar.Client
+	clientCache   map[string]pulsar.Client
+	consumerCache map[string]pulsar.Consumer
 
 	urlCache     map[string]string
 	optionsCache map[string]pulsarOptions
+	topicCache   map[string]topic
 
-	mutex sync.Mutex
+	clientMutex   sync.Mutex
+	consumerMutex sync.Mutex
 }
 
-func newClient(urls map[string]string, options map[string]pulsarOptions) *Client {
+func newClient(urls map[string]string, options map[string]pulsarOptions, topics map[string]topic) *Client {
 	return &Client{
 		clientCache: make(map[string]pulsar.Client, 0),
 
 		urlCache:     urls,
 		optionsCache: options,
+		topicCache:   topics,
 	}
 }
 
@@ -37,28 +41,8 @@ func (c *Client) Producer(topic string, opts ...producerOption) (producer *Produ
 	}
 
 	producer = new(Producer)
-	producer.Producer, err = client.CreateProducer(pulsar.ProducerOptions{
-		Topic:      topic,
-		Name:       _options.name,
-		Properties: _options.properties,
-	})
-
-	return
-}
-
-func (c *Client) Subscribe(topic string, opts ...subscribeOption) (consumer *Consumer, err error) {
-	_options := defaultSubscribeOptions()
-	for _, opt := range opts {
-		opt.applySubscribe(_options)
-	}
-
-	var client pulsar.Client
-	if client, err = c.getPulsar(_options.options); nil != err {
-		return
-	}
-
-	consumer = new(Consumer)
-	consumer.Consumer, err = client.Subscribe(pulsar.ConsumerOptions{
+	producer.serializer = c.getSerializer(_options.serializer, _options.options)
+	producer.producer, err = client.CreateProducer(pulsar.ProducerOptions{
 		Topic:      topic,
 		Name:       _options.name,
 		Properties: _options.properties,
@@ -68,14 +52,14 @@ func (c *Client) Subscribe(topic string, opts ...subscribeOption) (consumer *Con
 }
 
 func (c *Client) getPulsar(options *options) (client pulsar.Client, err error) {
-	c.mutex.Lock()
+	c.clientMutex.Lock()
 	defer func() {
 		options.label = defaultLabel
-		c.mutex.Unlock()
+		c.clientMutex.Unlock()
 	}()
 
-	var exist bool
-	if client, exist = c.clientCache[options.label]; exist {
+	var exists bool
+	if client, exists = c.clientCache[options.label]; exists {
 		return
 	}
 
@@ -88,6 +72,16 @@ func (c *Client) getPulsar(options *options) (client pulsar.Client, err error) {
 		return
 	}
 	c.clientCache[options.label] = client
+
+	return
+}
+
+func (c *Client) getSerializer(serializer serializer, options *options) (final serializer) {
+	if serializerUnknown == serializer {
+		final = c.optionsCache[options.label].Serializer
+	} else {
+		final = serializer
+	}
 
 	return
 }

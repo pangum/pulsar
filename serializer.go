@@ -38,3 +38,22 @@ func (s serializer) Marshal(from interface{}) (to []byte, err error) {
 
 	return
 }
+
+func (s serializer) Unmarshal(bytes []byte, from interface{}) (err error) {
+	switch s {
+	case serializerProto:
+		err = proto.Unmarshal(bytes, from.(proto.Message))
+	case serializerJson:
+		err = json.Unmarshal(bytes, from)
+	case serializerXml:
+		err = xml.Unmarshal(bytes, from)
+	case serializerMsgpack:
+		err = msgpack.Unmarshal(bytes, from)
+	case serializerBytes:
+		// to = from.([]byte)
+	case serializerString:
+		// to = []byte(from.(string))
+	}
+
+	return
+}

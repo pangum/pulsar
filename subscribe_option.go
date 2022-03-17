@@ -8,6 +8,8 @@ type (
 	subscribeOptions struct {
 		*options
 
+		key        string
+		serializer serializer
 		name       string
 		properties map[string]string
 	}
@@ -17,6 +19,8 @@ func defaultSubscribeOptions() *subscribeOptions {
 	return &subscribeOptions{
 		options: defaultOptions(),
 
+		key:        defaultKey,
+		serializer: serializerUnknown,
 		name:       ``,
 		properties: make(map[string]string, 0),
 	}

@@ -6,6 +6,8 @@ type broker struct {
 	// 连接地址
 	// 可以不填，如果不填的话，使用默认地址
 	URL string `yaml:"url" json:"url" xml:"url" toml:"url" validate:"required_without=required,hostname_port"`
+	// 客户端列表
+	Clients []topicConfig `json:"clients" yaml:"clients" xml:"clients" toml:"clients"`
 	// 选项
 	Options pulsarOptions `json:"options" yaml:"options" xml:"options" toml:"options"`
 }
