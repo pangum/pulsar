@@ -4,6 +4,8 @@ go 1.17
 
 require (
 	github.com/apache/pulsar-client-go v0.8.1
+	github.com/goexl/exc v0.0.2
+	github.com/goexl/gox v0.0.4
 	github.com/pangum/pangu v0.1.0
 	github.com/vmihailenco/msgpack/v5 v5.3.5
 	google.golang.org/protobuf v1.27.1
@@ -30,9 +32,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.1 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/goexl/baozheng v0.0.1 // indirect
-	github.com/goexl/exc v0.0.2 // indirect
 	github.com/goexl/gfx v0.0.5 // indirect
-	github.com/goexl/gox v0.0.4 // indirect
 	github.com/goexl/mengpo v0.1.4 // indirect
 	github.com/goexl/simaqian v0.1.3 // indirect
 	github.com/goexl/xiren v0.0.2 // indirect
@@ -68,7 +68,7 @@ require (
 	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a // indirect
-	golang.org/x/sys v0.0.0-20220317022123-2c4bbad7e934 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
